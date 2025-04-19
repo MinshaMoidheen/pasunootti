@@ -1,0 +1,368 @@
+:root {
+    --primary-color: #262626;  /* Blue */
+    --secondary-color: #F1A73B; /* Gray */
+    --white-color: #ffffff; /* White */
+    --second-color: #FABD11;
+    --text-color:#615F60
+}
+
+
+
+.testimonial-slider .swiper-pagination .swiper-pagination-bullet-active {
+    background-color: var(--secondary-color);
+    opacity: 1;
+}
+
+
+.btn-default::before {
+    color:var(--secondary-color)
+}
+
+.about-content .about-content-footer ul li::before {
+    color:var(--secondary-color)
+}
+
+
+.slicknav_menu {
+    padding: 0;
+    background: var(--primary-color);
+}
+
+.video-container {
+    position: relative;
+    max-width: 320px;
+    height: 380px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.testimonial-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.play-button, .pause-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    font-size: 30px;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.pause-button {
+    display: none; /* Initially hidden */
+}
+
+.services-item-content ul li:before{
+    color: var(--secondary-color);
+}
+
+.subpage-header-box ol li::after{
+    color: var(--secondary-color);
+}
+
+.health-services-content ul li:before
+{
+    color: var(--secondary-color);
+}
+
+.navbar {
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.member-service .about-service-content ul li:before {
+    color: var(--secondary-color);
+}
+
+.slicknav_btn{
+    background-color: var(--secondary-color);
+}
+
+.btn-readmore{
+    color: var(--secondary-color);
+}
+
+.video-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    justify-content: center;
+    align-items: center;
+}
+
+.video-container {
+    position: relative;
+    width: 80%;
+    max-width: 700px;
+}
+
+.close-btn {
+    position: absolute;
+    top: -30px;
+    right: 0;
+    font-size: 30px;
+    color: white;
+    cursor: pointer;
+}
+
+video {
+    width: 100%;
+    border-radius: 8px;
+}
+
+
+.btn-video:hover {
+    color: var(--secondary-color);
+}
+
+  
+@media (max-width: 480px) {
+    .hero-images{
+        margin-left: 30px;
+    }
+  
+  
+  
+  .hero-image-2 img {
+      max-width: 120px;
+      height: 220px;
+     
+  }
+
+  .hero-image-1 img {
+    max-width: 120px;
+    height: 220px;
+   
+}
+
+  .image-1{
+    margin-top: 120px;
+  }
+
+
+}
+
+  /* Mobile View (Stack Images in Center) */
+  @media (max-width: 480px) {
+  
+  
+      .about-us-image-1 img,
+      .about-us-image-2 img {
+          max-width: 120px;
+          height: 220px;
+      }
+  }
+
+  .footer-quick-links ul li a {
+    color: var(--white-color); /* Default text color */
+    text-decoration: none; /* Remove underline */
+    transition: color 0.3s ease-in-out;
+}
+
+.footer-quick-links ul li a:hover {
+    color: var(--secondary-color); /* Change color on hover */
+}
+
+.footer-quick-links ul {
+    columns: 2; /* Split list into 2 columns */
+    -webkit-columns: 2;
+    -moz-columns: 2;
+    list-style: none; /* Remove default bullets */
+    padding: 0;
+}
+
+.footer-quick-links ul li {
+    margin-bottom: 8px; /* Add spacing between items */
+}
+
+.footer-quick-links ul li a {
+    color: var(--white-color); /* Default text color */
+    text-decoration: none; /* Remove underline */
+    transition: color 0.3s ease-in-out;
+}
+
+.footer-quick-links ul li a:hover {
+    color: var(--secondary-color); /* Change color on hover */
+}
+
+
+/* Navbar List Items */
+.navbar-nav .nav-item {
+    transition: background-color 0.3s ease-in-out;
+}
+
+
+/* Navbar Links */
+.navbar-nav .nav-item .nav-link {
+    color: var(--secondary-color); /* Default text color */
+    padding: 10px 15px; /* Add spacing */
+    transition: color 0.3s ease-in-out;
+}
+
+/* Change Text Color on Hover */
+.navbar-nav .nav-item:hover .nav-link {
+    color: white; /* Change text color on hover */
+}
+.hero-footer .readmorebtn{
+    color: var(--white-color);
+
+}
+
+
+.hero-footer .readmorebtn:hover{
+    color: var(--secondary-color);
+
+}
+
+
+
+/* Mobile view: max-width 768px */
+@media (max-width: 768px) {
+  .service-title a {
+    display: inline-block;
+    padding: 5px 10px;
+    text-decoration: underline;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  /* Simulate hover on tap */
+ 
+  .service-title a:hover {
+    background-color: #ffffff30; /* subtle background overlay */
+    color: var(--primary-color); /* use your theme's primary color */
+    border-radius: 6px;
+  }
+}
+
+
+
+
+.service-details {
+    display: none;
+    margin-left: 20px;
+    background: #f8f9fa;;
+    padding: 10px;
+    border-radius: 5px;
+    border-left: 4px solid #007bff;
+}
+
+.service-details ul {
+    padding-left: 15px;
+}
+
+.service-details li {
+    list-style-type: disc;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.service-item h3 a {
+    cursor: pointer;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.service-item h3 a:hover {
+    text-decoration: underline;
+}
+
+ /* Mobile View (Stack Images in Center) */
+ @media (max-width: 480px) {
+        
+    .page-about-image{
+        margin-left: 40px;
+    }
+    
+
+    .page-about-image-1 img,
+    .page-about-image-2 img {
+        max-width: 120px;
+        height: 180px;
+    }
+}
+
+
+
+  /* Fixed Contact Buttons Styles */
+  .fixed-contact-buttons {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 999;
+  }
+  
+  .whatsapp-button, .call-button {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 28px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    text-decoration: none;
+  }
+  
+  .whatsapp-button {
+    background-color: #25D366; /* WhatsApp green */
+  }
+  
+  .call-button {
+    background-color: var(--secondary-color); /* Use your theme color */
+  }
+  
+  .whatsapp-button:hover, .call-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+  }
+
+
+   
+ 
+  @media (max-width:480px) {
+    /* Change the background of the navbar when collapsed */
+    .collapse .navbar-collapse {
+        background-color:var(--primary-color);
+        padding: 10px;
+    }
+
+   
+    /* Ensure links inside navbar are visible */
+    .navbar-nav .nav-link {
+        color: white !important;
+    }
+
+    /* Change the background of the existing navbar toggle button */
+    .navbar-toggler {
+        background-color: var(--secondary-color) !important;
+        border: none;
+    }
+
+    /* Change the color of the navbar toggle icon */
+    .navbar-toggler-icon {
+        filter: invert(1); /* Makes it white */
+    }
+}
+
+ 

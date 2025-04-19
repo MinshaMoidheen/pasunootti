@@ -1,0 +1,10 @@
+# Enable CORS
+Header set Access-Control-Allow-Origin "*"
+Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+Header set Access-Control-Allow-Headers "Content-Type"
+
+# Handle PHP files
+AddType application/x-httpd-php .php
+
+# Prevent directory listing
+Options -Indexes 
