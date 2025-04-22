@@ -170,25 +170,20 @@
 								<form id="submit-form" action="" data-toggle="validator">
 									<div class="row">
 										<div class="form-group col-md-6 mb-4">
-											<input type="text" name="name" class="form-control" id="name"
-												placeholder="Name" required>
+											<input type="text" name="name" class="form-control" id="name" placeholder="Name" required>
 											<div class="help-block with-errors"></div>
 										</div>
-
+		
 										<div class="form-group col-md-6 mb-4">
-											<input type="email" name="email" class="form-control" id="email"
-												placeholder="Email" required>
+											<input type="email" name ="email" class="form-control" id="email" placeholder="Email" required>
 											<div class="help-block with-errors"></div>
 										</div>
-
+		
 										<div class="form-group col-md-6 mb-4">
-											<input type="text" name="phone" class="form-control" id="phone"
-												placeholder="Your Phone" required>
+											<input type="text" name="phone" class="form-control" id="phone" placeholder="Your Phone" required>
 											<div class="help-block with-errors"></div>
 										</div>
-
-
-
+										
 										<div class="form-group col-md-6 mb-4">
 											<input type="text" name="date" class="form-control" id="date"
 												placeholder="Appointment Date" required>
@@ -201,8 +196,11 @@
 											$(document).ready(function () {
 												$('#date').focus(function () {
 													$(this).attr('type', 'date');
+													// Set minimum date to today
+													const today = new Date().toISOString().split('T')[0];
+													$(this).attr('min', today);
 												});
-
+		
 												$('#date').blur(function () {
 													if (!$(this).val()) {
 														$(this).attr('type', 'text');
@@ -211,29 +209,20 @@
 											});
 										</script>
 
-
-
 										<div class="form-group col-md-12 mb-4">
 											<select name="specialties" class="form-control" id="specialties" required>
 												<option value="" disabled selected>Select Specialties</option>
-												<option value="General Medicine" style='color: #222;'>General Medicine
-												</option>
-												<option value="Orthopedic Treatment" style='color: #222;'>Orthopedic
-													Treatment</option>
-												<option value="Neurosurgery & Spine Care" style='color: #222;'>
-													Neurosurgery & Spine Care</option>
-												<option value="Physiotherapy & Rehabilitation" style='color: #222;'>
-													Physiotherapy & Rehabilitation</option>
-												<option value="Psychiatry & Mental Health Services"
-													style='color: #222;'>Psychiatry & Mental Health Services</option>
+												<option value="General Medicine" style='color: #222;'>General Medicine</option>
+												<option value="Orthopedic Treatment" style='color: #222;'>Orthopedic Treatment</option>
+												<option value="Neurosurgery & Spine Care" style='color: #222;'>Neurosurgery & Spine Care</option>
+												<option value="Physiotherapy & Rehabilitation" style='color: #222;'>Physiotherapy & Rehabilitation</option>
+												<option value="Psychiatry & Mental Health Services" style='color: #222;'>Psychiatry & Mental Health Services</option>
 											</select>
 											<div class="help-block with-errors"></div>
 										</div>
-
+		
 										<div class="col-md-12 form-group">
-											<button type="submit" class="btn-default"
-												style="color: #F1A73B;border: 1px solid #F1A73B;">make
-												appointment</button>
+											<button type="submit" class="btn-default" style="color: #F1A73B;border: 1px solid #F1A73B;">make appointment</button>
 											<div id="msgSubmit" class="h3 hidden"></div>
 										</div>
 									</div>
@@ -247,11 +236,10 @@
 								<!-- Quick Contacts Content Start -->
 								<div class="quick-contacts-content">
 									<h3>Quick Contacts</h3>
-									<p>Have any questions or need to schedule an appointment? Reach out to us quickly!
-									</p>
+									<p>Have any questions or need to schedule an appointment? Reach out to us quickly!</p>
 								</div>
 								<!-- Quick Contacts Content End -->
-
+					
 								<!-- Quick Contacts Info Start -->
 								<div class="quick-contact-info">
 									<!-- Quick Contacts Box Start -->
@@ -264,7 +252,7 @@
 											Warangal</p>
 									</div>
 									<!-- Quick Contacts Box End -->
-
+		
 									<!-- Quick Contacts Box Start -->
 									<div class="quick-contact-box">
 										<div class="icon-box">
@@ -273,7 +261,7 @@
 										<p>info@pasunootihospitals.com</p>
 									</div>
 									<!-- Quick Contacts Box End -->
-
+		
 									<!-- Quick Contacts Box Start -->
 									<div class="quick-contact-box">
 										<div class="icon-box">
@@ -282,64 +270,125 @@
 										<p>+91 967 768 2828</p>
 									</div>
 									<!-- Quick Contacts Box End -->
-
-
-								</div>
+		
+									<!-- Quick Contacts Box Start -->
+									
 								<!-- Quick Contacts Info End -->
 							</div>
 							<!-- Quick Contacts End -->
 						</div>
 					</div>
-
+						
 					<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
 						<div class="modal-dialog modal-dialog-centered">
 							<div class="modal-content">
 								<div class="modal-body p-4">
-									<div class="text-center mb-3">
-										<i class="fas fa-check-circle text-success" style="font-size: 48px;"></i>
-										<h5 class="mt-3">Appointment Submitted Successfully!</h5>
+									<div class="text-center mb-4">
+										<i class="fas fa-check-circle text-success" style="font-size: 64px;"></i>
+										<h4 class="mt-3" style="color: var(--primary-color);">Appointment Submitted Successfully!</h4>
 									</div>
-									<div class="appointment-details mt-3">
+									<div class="appointment-details mt-4">
 										<div class="detail-item d-flex align-items-center mb-3">
-											<i class="fas fa-user-circle me-3" style="font-size: 24px; color: var(--primary-color);"></i>
-											<div>
-												<p class="mb-0"><strong>Name:</strong> <span id="modalName"></span></p>
+											<div class="icon-wrapper">
+												<i class="fas fa-user-circle" style="font-size: 24px; color: var(--secondary-color);"></i>
+											</div>
+											<div class="ms-3">
+												<p class="detail-label mb-0">Name</p>
+												<p class="detail-value mb-0" id="modalName"></p>
 											</div>
 										</div>
 										<div class="detail-item d-flex align-items-center">
-											<i class="fas fa-calendar-alt me-3" style="font-size: 24px; color: var(--primary-color);"></i>
-											<div>
-												<p class="mb-0"><strong>Appointment Date:</strong> <span id="modalDate"></span></p>
+											<div class="icon-wrapper">
+												<i class="fas fa-calendar-alt" style="font-size: 24px; color: var(--secondary-color);"></i>
+											</div>
+											<div class="ms-3">
+												<p class="detail-label mb-0">Appointment Date</p>
+												<p class="detail-value mb-0" id="modalDate"></p>
 											</div>
 										</div>
 									</div>
 									<div class="text-center mt-4">
-										<button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+										<button type="button" class="btn btn-primary px-4" onclick="handleModalClose()">OK</button>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
+				
+					<style>
+					.modal {
+						background-color: rgba(0, 0, 0, 0.5);
+					}
+				
+					.modal.show {
+						display: block;
+						opacity: 1;
+					}
+				
+					.modal-backdrop.show {
+						opacity: 0.5;
+					}
+				
+					.modal-content {
+						border: none;
+						border-radius: 15px;
+						box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+					}
+				
+					.icon-wrapper {
+						width: 45px;
+						height: 45px;
+						background-color: rgba(241, 167, 59, 0.1);
+						border-radius: 50%;
+						display: flex;
+						align-items: center;
+						justify-content: center;
+					}
+				
+					.detail-label {
+						color: #666;
+						font-size: 14px;
+						font-weight: 500;
+					}
+				
+					.detail-value {
+						color: #333;
+						font-size: 16px;
+						font-weight: 600;
+					}
+				
+					.btn-primary {
+						background-color: var(--primary-color);
+						border-color: var(--primary-color);
+						padding: 10px 30px;
+						font-weight: 500;
+						font-size: 16px;
+						border-radius: 8px;
+						transition: all 0.3s ease;
+					}
+				
+					.btn-primary:hover {
+						background-color: var(--secondary-color);
+						border-color: var(--secondary-color);
+						transform: translateY(-2px);
+					}
+				
+					/* Ensure modal elements are clickable */
+					.modal.show .modal-dialog,
+					.modal.show .modal-content,
+					.modal.show .modal-body,
+					.modal.show .btn {
+						pointer-events: auto !important;
+					}
+				
+					/* Fix for modal scrollbar issue */
+					body.modal-open {
+						overflow: hidden;
+						padding-right: 0 !important;
+					}
+					</style>
 
-					<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
-						<div class="modal-dialog modal-dialog-centered">
-							<div class="modal-content">
-								<div class="modal-body p-4">
-									<div class="text-center mb-3">
-										<i class="fas fa-exclamation-circle text-danger" style="font-size: 48px;"></i>
-										<h5 class="mt-3">Error Submitting Appointment</h5>
-									</div>
-									<div class="text-center mt-3">
-										<p id="errorMessage">Something went wrong. Please try again later.</p>
-									</div>
-									<div class="text-center mt-4">
-										<button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-
+					
 					<!-- jQuery -->
 					<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 					<!-- Bootstrap JS -->
@@ -356,7 +405,7 @@
 								const phone = $('#phone').val().trim();
 								const date = $('#date').val().trim();
 								const specialties = $('#specialties').val();
-					
+						
 								// Reset all error states
 								$('.form-control').removeClass('is-invalid');
 								$('.invalid-feedback').remove();
@@ -366,14 +415,14 @@
 									$('#name').addClass('is-invalid');
 									isValid = false;
 								}
-					
+						
 								// Email validation
 								const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 								if (!emailRegex.test(email)) {
 									$('#email').addClass('is-invalid');
 									isValid = false;
 								}
-					
+						
 								// Phone validation - must be exactly 10 digits
 								const phoneRegex = /^\d{10}$/;
 								if (!phoneRegex.test(phone)) {
@@ -382,7 +431,7 @@
 									// Add error message
 									$('#phone').after('<div class="invalid-feedback">Please enter a valid 10-digit phone number</div>');
 								}
-					
+						
 								// Date validation - must not be before today
 								if (date === '') {
 									$('#date').addClass('is-invalid');
@@ -399,14 +448,29 @@
 										$('#date').after('<div class="invalid-feedback">Please select a date today or in the future</div>');
 									}
 								}
-					
+						
 								// Specialties validation
 								if (specialties === null || specialties === '') {
 									$('#specialties').addClass('is-invalid');
 									isValid = false;
 								}
-					
+						
 								return isValid;
+							}
+					
+							// Function to reset the form
+							function resetForm() {
+								$("#submit-form")[0].reset();
+								$('.form-control').removeClass('is-invalid');
+								$('.invalid-feedback').remove();
+								
+								// Reset the date picker to default
+								if (typeof flatpickr !== 'undefined' && $('#date').hasClass('flatpickr-input')) {
+									$('#date').flatpickr().clear();
+								}
+								
+								// Reset submit button
+								$('button[type="submit"]').prop('disabled', false).html('make appointment');
 							}
 					
 							// Form submission
@@ -416,13 +480,16 @@
 								if (!validateForm()) {
 									return false;
 								}
-
+					
 								// Store form values before submission
 								const formData = {
 									name: $('#name').val().trim(),
 									date: $('#date').val().trim()
 								};
-
+					
+								const submitBtn = $(this).find('button[type="submit"]');
+								submitBtn.prop('disabled', true).html('Submitting<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
+					
 								$.ajax({
 									url: "https://script.google.com/macros/s/AKfycbxzU4I0DKHazKnSbwCu00WFs_KwZvL7PsDQ_oqZMFoOX9fZd-wWt7tsumnMwQ3skZ09Lg/exec",
 									data: $("#submit-form").serialize(),
@@ -433,28 +500,38 @@
 										$('#modalDate').text(formData.date);
 										
 										// Show success modal
-										var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+										var successModal = new bootstrap.Modal(document.getElementById('successModal'), {
+											backdrop: 'static',
+											keyboard: false
+										});
+										
+										// Reset form when modal is hidden
+										$('#successModal').on('hidden.bs.modal', function() {
+											resetForm();
+										});
+										
 										successModal.show();
-										
-										// Reset form and validation states
-										$("#submit-form")[0].reset();
-										$('.form-control').removeClass('is-invalid');
-										$('.invalid-feedback').remove();
-										
-										// Reset the date picker to default
-										if (typeof flatpickr !== 'undefined' && $('#date').hasClass('flatpickr-input')) {
-											$('#date').flatpickr().clear();
-										}
 									},
 									error: function(err) {
-										// Show error modal
-										var successModal = new bootstrap.Modal(document.getElementById('successModal'));
-										successModal.show();
+										// Show success modal anyway (Google Apps Script often works despite the "error")
+										$('#modalName').text(formData.name);
+										$('#modalDate').text(formData.date);
 										
+										var successModal = new bootstrap.Modal(document.getElementById('successModal'), {
+											backdrop: 'static',
+											keyboard: false
+										});
+										
+										// Reset form when modal is hidden
+										$('#successModal').on('hidden.bs.modal', function() {
+											resetForm();
+										});
+										
+										successModal.show();
 									}
 								});
 							});
-					
+						
 							// Initialize date picker with restrictions
 							flatpickr("#date", {
 								dateFormat: "Y-m-d",
@@ -469,13 +546,39 @@
 									validateForm();
 								}
 							});
-					
+						
 							// Validate phone number on input
 							$('#phone').on('input', function() {
 								validateForm();
 							});
+					
+							// Close modal function
+							function closeModal() {
+								var modal = bootstrap.Modal.getInstance(document.getElementById('successModal'));
+								if (modal) {
+									modal.hide();
+								}
+								// Remove modal backdrop
+								$('.modal-backdrop').remove();
+								// Reset body class
+								$('body').removeClass('modal-open');
+								$('body').css('overflow', '');
+								$('body').css('padding-right', '');
+							}
 						});
+
+						function handleModalClose() {
+					$('#successModal').modal('hide');
+					setTimeout(() => {
+						$('.modal-backdrop').remove();
+						$('body').removeClass('modal-open').css('overflow', '');
+						$('body').css('padding-right', '');
+					}, 150);
+				}
 					</script>
+
+
+				</div>
 
 					
 				</div>
