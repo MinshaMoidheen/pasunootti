@@ -37,7 +37,7 @@
 	<script src="script.js"></script>
 	<link rel="stylesheet" href="styles.css">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
 <body class="tt-magic-cursor">
@@ -167,7 +167,7 @@
 						<div class="col-lg-8">
 							<!-- Contact Form Start -->
 							<div class="contact-form">
-								<form id="appointmentForm" action="#" method="POST" data-toggle="validator">
+								<form id="submit-form" action="" data-toggle="validator">
 									<div class="row">
 										<div class="form-group col-md-6 mb-4">
 											<input type="text" name="name" class="form-control" id="name"
@@ -291,7 +291,7 @@
 						</div>
 					</div>
 
-					<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true" data-bs-backdrop="false">
+					<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
 						<div class="modal-dialog modal-dialog-centered">
 							<div class="modal-content">
 								<div class="modal-body p-4">
@@ -314,106 +314,165 @@
 										</div>
 									</div>
 									<div class="text-center mt-4">
-									
-										<button type="button" class="btn btn-primary" id="confirmAppointment">OK</button>
+										<button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-					
+
+					<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+						<div class="modal-dialog modal-dialog-centered">
+							<div class="modal-content">
+								<div class="modal-body p-4">
+									<div class="text-center mb-3">
+										<i class="fas fa-exclamation-circle text-danger" style="font-size: 48px;"></i>
+										<h5 class="mt-3">Error Submitting Appointment</h5>
+									</div>
+									<div class="text-center mt-3">
+										<p id="errorMessage">Something went wrong. Please try again later.</p>
+									</div>
+									<div class="text-center mt-4">
+										<button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
 					<!-- jQuery -->
 					<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 					<!-- Bootstrap JS -->
 					<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 					
-					<!-- Script -->
+
 					<script>
-						$(document).ready(function () {
-							// Convert text to date on focus
-							$('#date').focus(function () {
-								$(this).attr('type', 'date');
-								// Set minimum date to today
-								const today = new Date().toISOString().split('T')[0];
-								$(this).attr('min', today);
-							}).blur(function () {
-								if (!$(this).val()) {
-									$(this).attr('type', 'text');
-								}
-							});
-			
-							// Phone number validation
-							$('#phone').on('input', function() {
-								const phoneValue = $(this).val();
-								const phoneRegex = /^[0-9]{10}$/;
+						$(document).ready(function() {
+							// Form validation
+							function validateForm() {
+								let isValid = true;
+								const name = $('#name').val().trim();
+								const email = $('#email').val().trim();
+								const phone = $('#phone').val().trim();
+								const date = $('#date').val().trim();
+								const specialties = $('#specialties').val();
+					
+								// Reset all error states
+								$('.form-control').removeClass('is-invalid');
+								$('.invalid-feedback').remove();
 								
-								if (!phoneRegex.test(phoneValue)) {
-									$(this).addClass('is-invalid');
-									$(this).next('.help-block').text('Please enter a valid 10-digit phone number');
-								} else {
-									$(this).removeClass('is-invalid');
-									$(this).next('.help-block').text('');
+								// Name validation
+								if (name === '') {
+									$('#name').addClass('is-invalid');
+									isValid = false;
 								}
-							});
-			
-							// Date validation
-							$('#date').on('change', function() {
-								const selectedDate = new Date($(this).val());
-								const today = new Date();
-								today.setHours(0, 0, 0, 0);
-			
-								if (selectedDate < today) {
-									$(this).addClass('is-invalid');
-									$(this).next('.help-block').text('Please select a future date');
-								} else {
-									$(this).removeClass('is-invalid');
-									$(this).next('.help-block').text('');
+					
+								// Email validation
+								const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+								if (!emailRegex.test(email)) {
+									$('#email').addClass('is-invalid');
+									isValid = false;
 								}
-							});
-			
-							// Handle form submission
-							$('#appointmentForm').on('submit', function (e) {
-								e.preventDefault();
-			
-								// Validate phone number
-								const phoneValue = $('#phone').val();
-								const phoneRegex = /^[0-9]{10}$/;
-								if (!phoneRegex.test(phoneValue)) {
+					
+								// Phone validation - must be exactly 10 digits
+								const phoneRegex = /^\d{10}$/;
+								if (!phoneRegex.test(phone)) {
 									$('#phone').addClass('is-invalid');
-									$('#phone').next('.help-block').text('Please enter a valid 10-digit phone number');
-									return;
+									isValid = false;
+									// Add error message
+									$('#phone').after('<div class="invalid-feedback">Please enter a valid 10-digit phone number</div>');
 								}
-			
-								// Validate date
-								const selectedDate = new Date($('#date').val());
-								const today = new Date();
-								today.setHours(0, 0, 0, 0);
-			
-								if (selectedDate < today) {
+					
+								// Date validation - must not be before today
+								if (date === '') {
 									$('#date').addClass('is-invalid');
-									$('#date').next('.help-block').text('Please select a future date');
-									return;
+									isValid = false;
+								} else {
+									const selectedDate = new Date(date);
+									const today = new Date();
+									today.setHours(0, 0, 0, 0); // Reset time part to compare only dates
+									
+									if (selectedDate < today) {
+										$('#date').addClass('is-invalid');
+										isValid = false;
+										// Add error message
+										$('#date').after('<div class="invalid-feedback">Please select a date today or in the future</div>');
+									}
 								}
-			
-								// Get form values
-								const name = $('#name').val();
-								const date = $('#date').val();
-			
-								// Update modal content with form values
-								$('#modalName').text(name);
-								$('#modalDate').text(date);
-			
-								// If all validations pass, show success modal
-								const modal = new bootstrap.Modal(document.getElementById('successModal'));
-								modal.show();
-								$('#appointmentForm')[0].reset();
-								$('#date').attr('type', 'text'); // Reset date input
+					
+								// Specialties validation
+								if (specialties === null || specialties === '') {
+									$('#specialties').addClass('is-invalid');
+									isValid = false;
+								}
+					
+								return isValid;
+							}
+					
+							// Form submission
+							$("#submit-form").submit(function(e) {
+								e.preventDefault();
+								
+								if (!validateForm()) {
+									return false;
+								}
+
+								// Store form values before submission
+								const formData = {
+									name: $('#name').val().trim(),
+									date: $('#date').val().trim()
+								};
+
+								$.ajax({
+									url: "https://script.google.com/macros/s/AKfycbxzU4I0DKHazKnSbwCu00WFs_KwZvL7PsDQ_oqZMFoOX9fZd-wWt7tsumnMwQ3skZ09Lg/exec",
+									data: $("#submit-form").serialize(),
+									method: "post",
+									success: function(response) {
+										// Update modal content with stored values
+										$('#modalName').text(formData.name);
+										$('#modalDate').text(formData.date);
+										
+										// Show success modal
+										var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+										successModal.show();
+										
+										// Reset form and validation states
+										$("#submit-form")[0].reset();
+										$('.form-control').removeClass('is-invalid');
+										$('.invalid-feedback').remove();
+										
+										// Reset the date picker to default
+										if (typeof flatpickr !== 'undefined' && $('#date').hasClass('flatpickr-input')) {
+											$('#date').flatpickr().clear();
+										}
+									},
+									error: function(err) {
+										// Show error modal
+										var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+										successModal.show();
+										
+									}
+								});
 							});
-			
-							// Handle OK button click
-							$('#confirmAppointment').on('click', function() {
-								const modal = bootstrap.Modal.getInstance(document.getElementById('successModal'));
-								modal.hide();
+					
+							// Initialize date picker with restrictions
+							flatpickr("#date", {
+								dateFormat: "Y-m-d",
+								minDate: "today", // Prevent selecting dates before today
+								disable: [
+									function(date) {
+										return (date.getDay() === 0); // Disable Sundays
+									}
+								],
+								onChange: function(selectedDates, dateStr, instance) {
+									// Validate date when changed
+									validateForm();
+								}
+							});
+					
+							// Validate phone number on input
+							$('#phone').on('input', function() {
+								validateForm();
 							});
 						});
 					</script>

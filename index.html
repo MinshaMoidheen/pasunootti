@@ -34,6 +34,7 @@
 	<link rel="stylesheet" href="css/magnific-popup.css">
 	<!-- Main custom Css -->
 	<link href="css/custom.css" rel="stylesheet" media="screen">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 	<link rel="stylesheet" href="styles.css">
 
@@ -1183,7 +1184,7 @@
 				<div class="col-lg-8 col-md-7 col-12">
 					<!-- Contact Form start -->
 					<div class="contact-form">
-						<form id="appointmentForm" action="#" method="POST" data-toggle="validator">
+						<form id="submit-form" action="" data-toggle="validator">
 							<div class="row">
 								<div class="form-group col-md-6 mb-4">
 									<input type="text" name="name" class="form-control" id="name" placeholder="Name" required>
@@ -1247,7 +1248,7 @@
 					<!-- Contact Form end -->
 
 					<!-- Success Modal -->
-		<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true" data-bs-backdrop="false">
+		<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered">
 				<div class="modal-content">
 					<div class="modal-body p-4">
@@ -1270,8 +1271,7 @@
 							</div>
 						</div>
 						<div class="text-center mt-4">
-						
-							<button type="button" class="btn btn-primary" id="confirmAppointment">OK</button>
+							<button type="button" class="btn btn-primary">OK</button>
 						</div>
 					</div>
 				</div>
@@ -1285,121 +1285,186 @@
 		
 		<!-- Script -->
 		<script>
-			$(document).ready(function () {
-				// Convert text to date on focus
-				$('#date').focus(function () {
-					$(this).attr('type', 'date');
-					// Set minimum date to today
-					const today = new Date().toISOString().split('T')[0];
-					$(this).attr('min', today);
-				}).blur(function () {
-					if (!$(this).val()) {
-						$(this).attr('type', 'text');
+			$(document).ready(function() {
+				// Form validation
+				function validateForm() {
+					let isValid = true;
+					const name = $('#name').val().trim();
+					const email = $('#email').val().trim();
+					const phone = $('#phone').val().trim();
+					const date = $('#date').val().trim();
+					const specialties = $('#specialties').val();
+
+					// Reset all error states
+					$('.form-control').removeClass('is-invalid');
+					$('.invalid-feedback').remove();
+
+					// Name validation
+					if (name === '') {
+						$('#name').addClass('is-invalid');
+						$('#name').after('<div class="invalid-feedback">Please enter your name</div>');
+						isValid = false;
 					}
-				});
 
-				// Phone number validation
-				$('#phone').on('input', function() {
-					const phoneValue = $(this).val();
-					const phoneRegex = /^[0-9]{10}$/;
-					
-					if (!phoneRegex.test(phoneValue)) {
-						$(this).addClass('is-invalid');
-						$(this).next('.help-block').text('Please enter a valid 10-digit phone number');
-					} else {
-						$(this).removeClass('is-invalid');
-						$(this).next('.help-block').text('');
+					// Email validation
+					const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+					if (!emailRegex.test(email)) {
+						$('#email').addClass('is-invalid');
+						$('#email').after('<div class="invalid-feedback">Please enter a valid email address</div>');
+						isValid = false;
 					}
-				});
 
-				// Date validation
-				$('#date').on('change', function() {
-					const selectedDate = new Date($(this).val());
-					const today = new Date();
-					today.setHours(0, 0, 0, 0);
-
-					if (selectedDate < today) {
-						$(this).addClass('is-invalid');
-						$(this).next('.help-block').text('Please select a future date');
-					} else {
-						$(this).removeClass('is-invalid');
-						$(this).next('.help-block').text('');
-					}
-				});
-
-				// Handle form submission
-				$('#appointmentForm').on('submit', function (e) {
-					e.preventDefault();
-
-					// Validate phone number
-					const phoneValue = $('#phone').val();
-					const phoneRegex = /^[0-9]{10}$/;
-					if (!phoneRegex.test(phoneValue)) {
+					// Phone validation
+					const phoneRegex = /^\d{10}$/;
+					if (!phoneRegex.test(phone)) {
 						$('#phone').addClass('is-invalid');
-						$('#phone').next('.help-block').text('Please enter a valid 10-digit phone number');
-						return;
+						$('#phone').after('<div class="invalid-feedback">Please enter a valid 10-digit phone number</div>');
+						isValid = false;
 					}
 
-					// Validate date
-					const selectedDate = new Date($('#date').val());
-					const today = new Date();
-					today.setHours(0, 0, 0, 0);
-
-					if (selectedDate < today) {
+					// Date validation
+					if (date === '') {
 						$('#date').addClass('is-invalid');
-						$('#date').next('.help-block').text('Please select a future date');
-						return;
+						$('#date').after('<div class="invalid-feedback">Please select an appointment date</div>');
+						isValid = false;
+					} else {
+						const selectedDate = new Date(date);
+						const today = new Date();
+						today.setHours(0, 0, 0, 0);
+						
+						if (selectedDate < today) {
+							$('#date').addClass('is-invalid');
+							$('#date').after('<div class="invalid-feedback">Please select a date today or in the future</div>');
+							isValid = false;
+						}
 					}
 
-					// Get form values
+					// Specialties validation
+					if (specialties === null || specialties === '') {
+						$('#specialties').addClass('is-invalid');
+						$('#specialties').after('<div class="invalid-feedback">Please select a specialty</div>');
+						isValid = false;
+					}
+
+					return isValid;
+				}
+
+				// Form submission
+				$("#submit-form").submit(function(e) {
+					e.preventDefault();
+					
+					if (!validateForm()) {
+						showErrorModal("Please check all fields and try again.");
+						return false;
+					}
+
+					// Store form values before submission
 					const formData = {
-						name: $('#name').val(),
-						email: $('#email').val(),
-						phone: $('#phone').val(),
-						date: $('#date').val(),
-						specialty: $('#specialties').val()
+						name: $('#name').val().trim(),
+						date: $('#date').val().trim()
 					};
 
 					// Show loading state
-					$('#confirmAppointment').prop('disabled', true).text('Submitting...');
+					const submitBtn = $(this).find('button[type="submit"]');
+					submitBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Submitting...');
 
-					// Submit to Google Apps Script
-					fetch('https://script.google.com/macros/s/AKfycbw-FWndh9yVee026Z0mmHlrOkv8NUrkWZvBOrq6wfZ6sTMGhMc9TlxPCQC2gAx1sxTrfQ/exec', {
-						method: 'POST',
-						headers: {
-							'Content-Type': 'application/json',
+					$.ajax({
+						url: "https://script.google.com/macros/s/AKfycbxzU4I0DKHazKnSbwCu00WFs_KwZvL7PsDQ_oqZMFoOX9fZd-wWt7tsumnMwQ3skZ09Lg/exec",
+						data: $("#submit-form").serialize(),
+						method: "post",
+						success: function(response) {
+							// Update modal content
+							$('#modalName').text(formData.name);
+							$('#modalDate').text(formData.date);
+							
+							// Show success modal
+							showSuccessModal();
+							
+							// Reset form
+							resetForm();
 						},
-						body: JSON.stringify(formData),
-						mode: 'no-cors'
-					})
-					.then(() => {
-						// Since we're using no-cors, we can't get the response
-						// But we can assume success if no error occurred
-						$('#modalName').text(formData.name);
-						$('#modalDate').text(formData.date);
-						
-						// Show success modal
-						const modal = new bootstrap.Modal(document.getElementById('successModal'));
-						modal.show();
-						
-						// Reset form
-						$('#appointmentForm')[0].reset();
-						$('#date').attr('type', 'text');
-					})
-					.catch(error => {
-						console.error('Error:', error);
-						alert('There was an error submitting your appointment. Please try again later.');
-					})
-					.finally(() => {
-						// Reset button state
-						$('#confirmAppointment').prop('disabled', false).text('OK');
+						error: function(err) {
+							$('#modalName').text(formData.name);
+							$('#modalDate').text(formData.date);
+							
+							// Show success modal
+							showSuccessModal();
+							
+							// Reset form
+							resetForm();
+						}
 					});
 				});
 
-				// Handle OK button click
-				$('#confirmAppointment').on('click', function() {
-					const modal = bootstrap.Modal.getInstance(document.getElementById('successModal'));
-					modal.hide();
+				// Function to show success modal
+				function showSuccessModal() {
+					const modal = new bootstrap.Modal(document.getElementById('successModal'), {
+						backdrop: 'static',
+						keyboard: false
+					});
+					modal.show();
+
+					// Add click event to OK button
+					$('#successModal .btn-primary').one('click', function() {
+						closeModal('successModal');
+					});
+				}
+
+				// Function to show error modal
+				function showErrorModal(message) {
+					$('#errorMessage').text(message);
+					const modal = new bootstrap.Modal(document.getElementById('errorModal'));
+					modal.show();
+
+					// Add click event to OK button
+					$('#errorModal .btn-primary').one('click', function() {
+						closeModal('errorModal');
+					});
+				}
+
+				// Function to close modal and clean up
+				function closeModal(modalId) {
+					const modalElement = document.getElementById(modalId);
+					const modalInstance = bootstrap.Modal.getInstance(modalElement);
+					
+					if (modalInstance) {
+						modalInstance.hide();
+					}
+
+					// Clean up modal effects
+					setTimeout(() => {
+						$('.modal-backdrop').remove();
+						$('body').removeClass('modal-open');
+						$('body').css('overflow', '');
+						$('body').css('padding-right', '');
+					}, 200);
+				}
+
+				// Function to reset form
+				function resetForm() {
+					$("#submit-form")[0].reset();
+					$('.form-control').removeClass('is-invalid');
+					$('.invalid-feedback').remove();
+					$('button[type="submit"]').prop('disabled', false).html('make appointment');
+				}
+
+				// Initialize date picker
+				flatpickr("#date", {
+					dateFormat: "Y-m-d",
+					minDate: "today",
+					disable: [
+						function(date) {
+							return (date.getDay() === 0); // Disable Sundays
+						}
+					]
+				});
+
+				// Update modal button handlers
+				$('#successModal, #errorModal').each(function() {
+					const modalId = this.id;
+					$(this).find('.btn-primary').on('click', function() {
+						closeModal(modalId);
+					});
 				});
 			});
 		</script>

@@ -661,14 +661,14 @@ header.main-header .header-sticky.active{
 
 .hero{
 	padding: 120px 0;
-	background: url('../images/half-circle-img.png') no-repeat bottom right 30px, var(--primary-color);
+	background:  var(--primary-color);
 	position: relative;
 }
 
 .hero::before{
 	position: absolute;
 	content: '';
-	background: url('../images/half-shape.png') no-repeat bottom left;
+
 	height: 100%;
 	width: 100%;
 	bottom: 0;
