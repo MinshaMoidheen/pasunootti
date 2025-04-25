@@ -1338,6 +1338,7 @@
 							date: $('#date').val().trim()
 						};
 	
+						$(this).submit()
 						const submitBtn = $(this).find('button[type="submit"]');
 						submitBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Submitting...');
 	
