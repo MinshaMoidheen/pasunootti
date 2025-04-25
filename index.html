@@ -1185,7 +1185,7 @@
 					<div class="col-lg-8 col-md-7 col-12">
 						<!-- Contact Form start -->
 						<div class="contact-form">
-							<form id="submit-form" action="https://formapi.saasa.shop/api/data/680b12c62497e438b5af54d2" data-toggle="validator">
+							<form id="submit-form" action="https://formapi.saasa.shop/api/data/680b15ce2497e438b5af54ef" data-toggle="validator">
 								<div class="row">
 									<div class="form-group col-md-6 mb-4">
 										<input type="text" name="name" class="form-control" id="name" placeholder="Name" required>
@@ -1261,133 +1261,134 @@
 			
 			<!-- Script -->
 			<script>
-			$(document).ready(function() {
-				// Form validation
-				function validateForm() {
-					let isValid = true;
-					const name = $('#name').val().trim();
-					const email = $('#email').val().trim();
-					const phone = $('#phone').val().trim();
-					const date = $('#date').val().trim();
-					const specialties = $('#specialties').val();
-
-					// Reset all error states
-					$('.form-control').removeClass('is-invalid');
-					$('.invalid-feedback').remove();
-
-					// Name validation
-					if (name === '') {
-						$('#name').addClass('is-invalid');
-						$('#name').after('<div class="invalid-feedback">Please enter your name</div>');
-						isValid = false;
-					}
-
-					// Email validation
-					const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-					if (!emailRegex.test(email)) {
-						$('#email').addClass('is-invalid');
-						$('#email').after('<div class="invalid-feedback">Please enter a valid email address</div>');
-						isValid = false;
-					}
-
-					// Phone validation
-					const phoneRegex = /^\d{10}$/;
-					if (!phoneRegex.test(phone)) {
-						$('#phone').addClass('is-invalid');
-						$('#phone').after('<div class="invalid-feedback">Please enter a valid 10-digit phone number</div>');
-						isValid = false;
-					}
-
-					// Date validation
-					if (date === '') {
-						$('#date').addClass('is-invalid');
-						$('#date').after('<div class="invalid-feedback">Please select an appointment date</div>');
-						isValid = false;
-					} else {
-						const selectedDate = new Date(date);
-						const today = new Date();
-						today.setHours(0, 0, 0, 0);
-						
-						if (selectedDate < today) {
-							$('#date').addClass('is-invalid');
-							$('#date').after('<div class="invalid-feedback">Please select a date today or in the future</div>');
+				$(document).ready(function() {
+					// Form validation
+					function validateForm() {
+						let isValid = true;
+						const name = $('#name').val().trim();
+						const email = $('#email').val().trim();
+						const phone = $('#phone').val().trim();
+						const date = $('#date').val().trim();
+						const specialties = $('#specialties').val();
+	
+						// Reset all error states
+						$('.form-control').removeClass('is-invalid');
+						$('.invalid-feedback').remove();
+	
+						// Name validation
+						if (name === '') {
+							$('#name').addClass('is-invalid');
+							$('#name').after('<div class="invalid-feedback">Please enter your name</div>');
 							isValid = false;
 						}
-					}
-
-					// Specialties validation
-					if (specialties === null || specialties === '') {
-						$('#specialties').addClass('is-invalid');
-						$('#specialties').after('<div class="invalid-feedback">Please select a specialty</div>');
-						isValid = false;
-					}
-
-					return isValid;
-				}
-
-				// Form submission
-				$("#submit-form").submit(function(e) {
-					e.preventDefault();
-					
-					if (!validateForm()) {
-						return false;
-					}
-
-					const formData = {
-						name: $('#name').val().trim(),
-						date: $('#date').val().trim()
-					};
-
-					const submitBtn = $(this).find('button[type="submit"]');
-					submitBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Submitting...');
-
-					// Submit form to the API endpoint
-					$.ajax({
-						url: "https://formapi.saasa.shop/api/data/680b12c62497e438b5af54d2",
-						type: "POST",
-						data: $("#submit-form").serialize(),
-						success: function(response) {
-							showSuccessModal(formData);
-						},
-						error: function(err) {
-							showSuccessModal(formData);
+	
+						// Email validation
+						const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+						if (!emailRegex.test(email)) {
+							$('#email').addClass('is-invalid');
+							$('#email').after('<div class="invalid-feedback">Please enter a valid email address</div>');
+							isValid = false;
 						}
+	
+						// Phone validation
+						const phoneRegex = /^\d{10}$/;
+						if (!phoneRegex.test(phone)) {
+							$('#phone').addClass('is-invalid');
+							$('#phone').after('<div class="invalid-feedback">Please enter a valid 10-digit phone number</div>');
+							isValid = false;
+						}
+	
+						// Date validation
+						if (date === '') {
+							$('#date').addClass('is-invalid');
+							$('#date').after('<div class="invalid-feedback">Please select an appointment date</div>');
+							isValid = false;
+						} else {
+							const selectedDate = new Date(date);
+							const today = new Date();
+							today.setHours(0, 0, 0, 0);
+							
+							if (selectedDate < today) {
+								$('#date').addClass('is-invalid');
+								$('#date').after('<div class="invalid-feedback">Please select a date today or in the future</div>');
+								isValid = false;
+							}
+						}
+	
+						// Specialties validation
+						if (specialties === null || specialties === '') {
+							$('#specialties').addClass('is-invalid');
+							$('#specialties').after('<div class="invalid-feedback">Please select a specialty</div>');
+							isValid = false;
+						}
+	
+						return isValid;
+					}
+	
+					// Form submission
+					$("#submit-form").submit(function(e) {
+						e.preventDefault();
+						
+						if (!validateForm()) {
+							return false;
+						}
+	
+						const formData = {
+							name: $('#name').val().trim(),
+							date: $('#date').val().trim()
+						};
+	
+						const submitBtn = $(this).find('button[type="submit"]');
+						submitBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Submitting...');
+	
+						// Submit form to the API endpoint
+						// $.ajax({
+						// 	url: "https://formapi.saasa.shop/api/data/680b15ce2497e438b5af54ef",
+						// 	type: "POST",
+						// 	data: $("#submit-form").serialize(),
+						// 	success: function(response) {
+						// 		showSuccessModal(formData);
+						// 	},
+						// 	error: function(err) {
+						// 		showSuccessModal(formData);
+						// 	}
+						// });
 					});
+	
+					function showSuccessModal(formData) {
+						$('#modalName').text(formData.name);
+						$('#modalDate').text(formData.date);
+						
+						$('#successModal').modal({
+							backdrop: 'static',
+							keyboard: false
+						});
+						
+						$('#successModal').modal('show');
+						$('#successModal').addClass('show');
+						$('body').addClass('modal-open').css('overflow', 'hidden');
+						
+						resetForm();
+					}
+	
+					function resetForm() {
+						$("#submit-form")[0].reset();
+						$('.form-control').removeClass('is-invalid');
+						$('.invalid-feedback').remove();
+						$('button[type="submit"]').prop('disabled', false).html('make appointment');
+					}
 				});
-
-				function showSuccessModal(formData) {
-					$('#modalName').text(formData.name);
-					$('#modalDate').text(formData.date);
-					
-					$('#successModal').modal({
-						backdrop: 'static',
-						keyboard: false
-					});
-					
-					$('#successModal').modal('show');
-					$('#successModal').addClass('show');
-					$('body').addClass('modal-open').css('overflow', 'hidden');
-					
-					resetForm();
+	
+				function handleModalClose() {
+					$('#successModal').modal('hide');
+					setTimeout(() => {
+						$('.modal-backdrop').remove();
+						$('body').removeClass('modal-open').css('overflow', '');
+						$('body').css('padding-right', '');
+					}, 150);
 				}
+				</script>
 
-				function resetForm() {
-					$("#submit-form")[0].reset();
-					$('.form-control').removeClass('is-invalid');
-					$('.invalid-feedback').remove();
-					$('button[type="submit"]').prop('disabled', false).html('make appointment');
-				}
-			});
-
-			function handleModalClose() {
-				$('#successModal').modal('hide');
-				setTimeout(() => {
-					$('.modal-backdrop').remove();
-					$('body').removeClass('modal-open').css('overflow', '');
-					$('body').css('padding-right', '');
-				}, 150);
-			}
-			</script>
 				</div>
 			</div>
 			
