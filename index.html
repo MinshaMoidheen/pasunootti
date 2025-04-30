@@ -23,20 +23,19 @@
 	<!-- Bootstrap Css -->
 	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
 	<!-- SlickNav Css -->
-	<link href="css/slicknav.min.css" rel="stylesheet">
+	<link href="css/slicknav.min.css" rel="stylesheet" media="screen">
 	<!-- Swiper Css -->
-	<link rel="stylesheet" href="css/swiper-bundle.min.css">
+	<link rel="stylesheet" href="css/swiper-bundle.min.css" media="screen">
 	<!-- Font Awesome Icon Css-->
 	<link href="css/all.css" rel="stylesheet" media="screen">
 	<!-- Animated Css -->
-	<link href="css/animate.css" rel="stylesheet">
+	<link href="css/animate.css" rel="stylesheet" media="screen">
 	<!-- Magnific Popup core CSS file -->
-	<link rel="stylesheet" href="css/magnific-popup.css">
+	<link rel="stylesheet" href="css/magnific-popup.css" media="screen">
 	<!-- Main custom Css -->
 	<link href="css/custom.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" href="styles.css" media="screen">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-	<link rel="stylesheet" href="styles.css">
 
 	<!-- JavaScript to Handle Modal -->
 	<script src="script.js"></script>
@@ -47,7 +46,7 @@
 	<div class="preloader" style="background-color: var(--primary-color);">
 		<div class="loading-container">
 			<div class="loading"></div>
-			<div id="loading-icon"><img src="images/pasunooti-logo.svg" alt=""></div>
+			<div id="loading-icon"><img src="images/pasunooti-logo.svg" alt="" loading="lazy" width="40" height="40"></div>
 		</div>
 	</div>
 	<!-- Preloader End -->
@@ -66,7 +65,7 @@
 					<!-- Logo Start -->
 					<div class="header-logo">
 						<a class="navbar-brand" href="index.html">
-							<img src="images/Pasunooti.png" alt="" height='40px'>
+							<img src="images/Pasunooti.png" alt="" height='40px' width="120" loading="lazy">
 						</a>
 					</div>
 					<!-- Logo End -->
@@ -160,12 +159,12 @@
 					<div class="hero-images">
 						<div class="hero-image-1">
 							<figure>
-								<img  src="images/banner.webp" alt="" height="500px" width="250px">
+								<img  src="images/banner.webp" alt="" height="500px" width="250px" loading="lazy">
 							</figure>
 						</div>
 						<div class="hero-image-2">
 							<figure>
-								<img src="images/180A0048-1.webp" alt="" height="500px" width="250px">
+								<img src="images/180A0048-1.webp" alt="" height="500px" width="250px" loading="lazy">
 							</figure>
 						</div>
 					</div>
@@ -431,12 +430,12 @@
 						<div class="about-us-image">
 							<div class="about-us-image-1">
 								<figure>
-									<img src="images/180A0016.webp" alt="" height="500px" width="250px">
+									<img src="images/180A0016.webp" alt="" height="500px" width="250px" loading="lazy">
 								</figure>
 							</div>
 							<div class="about-us-image-2">
 								<figure>
-									<img src="images/180A0140.webp" alt="" height="500px" width="250px">
+									<img src="images/180A0140.webp" alt="" height="500px" width="250px" loading="lazy">
 								</figure>
 							</div>
 						</div>
@@ -1033,6 +1032,7 @@
 	const feedContainer = document.getElementById('instaFeed');
 	let currentPage = 1;
 	let allPosts = [];
+	let isLoading = false;
 	
 	// Set posts per page based on screen width
 	const getPostsPerPage = () => {
@@ -1048,37 +1048,26 @@
 	});
 	
 	async function fetchAllPosts() {
-	  let nextUrl = `https://graph.facebook.com/v19.0/${userId}/media?fields=id,caption,media_url,permalink,media_type,timestamp&limit=18&access_token=${accessToken}`;
-	
+	  if (isLoading) return;
+	  isLoading = true;
+	  
 	  try {
-		while (nextUrl) {
-		  const response = await fetch(nextUrl);
-		  if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		  }
-		  
-		  const data = await response.json();
-		  
-		  if (data.data && data.data.length > 0) {
-			const validPosts = data.data.filter(post => post.media_url);
-			allPosts = allPosts.concat(validPosts);
-		  }
-		  
-		  nextUrl = data.paging && data.paging.next ? data.paging.next : null;
-		  
-		  if (!nextUrl || allPosts.length >= 18) { // Limit to 18 posts (3 pages of 6 posts)
-			break;
-		  }
+		const response = await fetch(`https://graph.facebook.com/v19.0/${userId}/media?fields=id,caption,media_url,permalink,media_type,timestamp&limit=18&access_token=${accessToken}`);
+		if (!response.ok) {
+		  throw new Error(`HTTP error! status: ${response.status}`);
 		}
-
-		allPosts = allPosts.slice(0, 18); // Ensure we only keep first 18 posts
+		
+		const data = await response.json();
+		allPosts = data.data.filter(post => post.media_url);
 		allPosts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+		
 		displayPage(1);
 		updatePaginationControls();
-
 	  } catch (err) {
 		console.error('Error fetching Instagram posts:', err);
 		feedContainer.innerHTML = '<p>Error loading Instagram posts. Please try again later.</p>';
+	  } finally {
+		isLoading = false;
 	  }
 	}
 
@@ -1096,7 +1085,7 @@
 		  
 		  let mediaElement = '';
 		  if (post.media_type === 'VIDEO') {
-			mediaElement = `<video src="${post.media_url}" controls></video>`;
+			mediaElement = `<video src="${post.media_url}" controls loading="lazy"></video>`;
 		  } else if (post.media_type === 'IMAGE' || post.media_type === 'CAROUSEL_ALBUM') {
 			mediaElement = `<img src="${post.media_url}" alt="Instagram Post" loading="lazy" />`;
 		  }
@@ -1120,7 +1109,7 @@
 	}
 
 	function updatePaginationControls() {
-	  const totalPages = Math.min(3, Math.ceil(allPosts.length / postsPerPage)); // Limit to 3 pages
+	  const totalPages = Math.min(3, Math.ceil(allPosts.length / postsPerPage));
 	  const prevBtn = document.getElementById('prevPage');
 	  const nextBtn = document.getElementById('nextPage');
 	  const pageInfo = document.getElementById('pageInfo');
@@ -1147,7 +1136,10 @@
 	  }
 	});
 	
-	document.addEventListener('DOMContentLoaded', fetchAllPosts);
+	// Load posts when the page is ready
+	document.addEventListener('DOMContentLoaded', () => {
+	  fetchAllPosts();
+	});
 </script>
         </div>
     </div>
@@ -1173,7 +1165,7 @@
 						<!-- Contact Appointment Start -->
 						<div class="contact-appointment" style="background-color:var(--secondary-color)">
 							<div class="appointment-img">
-								<img src="images/contact-us-img.png" alt="">
+								<img src="images/contact-us-img.png" alt="" loading="lazy" width="300" height="300">
 							</div>
 							<div class="appointment-content">
 								<h3>Make <strong>Appointment </strong>& Take Care Of Your Healthy Life</h3>
@@ -1404,7 +1396,7 @@
 					<div class="col-lg-4 col-md-6">
 						<div class="about-footer text-center text-md-start">
 							<div class="footer-logo mb-3">
-								<img src="images/Pasunooti.png" alt="Pasunooti Logo" height="40px">
+								<img src="images/Pasunooti.png" alt="Pasunooti Logo" height="40px" width="120" loading="lazy">
 							</div>
 							<p>Our family-centered approach to healthcare ensures that each member of your family
 								receives personalized attention.</p>
@@ -1554,35 +1546,35 @@
 	<!-- Footer End -->
 
 	<!-- Jquery Library File -->
-	<script src="js/jquery-3.7.1.min.js"></script>
+	<script src="js/jquery-3.7.1.min.js" defer></script>
 	<!-- Bootstrap js file -->
-	<script src="js/bootstrap.min.js"></script>
+	<script src="js/bootstrap.min.js" defer></script>
 	<!-- Validator js file -->
-	<script src="js/validator.min.js"></script>
+	<script src="js/validator.min.js" defer></script>
 	<!-- SlickNav js file -->
-	<script src="js/jquery.slicknav.js"></script>
+	<script src="js/jquery.slicknav.js" defer></script>
 	<!-- Swiper js file -->
-	<script src="js/swiper-bundle.min.js"></script>
+	<script src="js/swiper-bundle.min.js" defer></script>
 	<!-- Counter js file -->
-	<script src="js/jquery.waypoints.min.js"></script>
-	<script src="js/jquery.counterup.min.js"></script>
+	<script src="js/jquery.waypoints.min.js" defer></script>
+	<script src="js/jquery.counterup.min.js" defer></script>
 	<!-- Magnific js file -->
-	<script src="js/jquery.magnific-popup.min.js"></script>
+	<script src="js/jquery.magnific-popup.min.js" defer></script>
 	<!-- SmoothScroll -->
-	<script src="js/SmoothScroll.js"></script>
+	<script src="js/SmoothScroll.js" defer></script>
 	<!-- Parallax js -->
-	<script src="js/parallaxie.js"></script>
+	<script src="js/parallaxie.js" defer></script>
 	<!-- MagicCursor js file -->
-	<script src="js/gsap.min.js"></script>
-	<script src="js/magiccursor.js"></script>
+	<script src="js/gsap.min.js" defer></script>
+	<script src="js/magiccursor.js" defer></script>
 	<!-- Text Effect js file -->
-	<script src="js/SplitText.js"></script>
-	<script src="js/ScrollTrigger.min.js"></script>
+	<script src="js/SplitText.js" defer></script>
+	<script src="js/ScrollTrigger.min.js" defer></script>
 	<!-- Wow js file -->
-	<script src="js/wow.js"></script>
+	<script src="js/wow.js" defer></script>
 	<!-- Main Custom js file -->
-	<script src="js/function.js"></script>
-	<script src="../../demo.awaikenthemes.com/assets/js/theme-panel.js"></script>
+	<script src="js/function.js" defer></script>
+	<script src="../../demo.awaikenthemes.com/assets/js/theme-panel.js" defer></script>
 
 	<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered">
